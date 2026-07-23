@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ranketa — El ranking de pádel para tu cancha</title>
+  <meta name="description" content="Sistema de ranking de pádel profesional para canchas. Rey de la cancha, racha de victorias, estadísticas en tiempo real. Pago único $100 USD." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0A0F1A;
+      --surface: #111827;
+      --card: #151E2D;
+      --border: #1F2D42;
+      --accent: #B5F542;
+      --accent-glow: rgba(181,245,66,0.12);
+      --orange: #FF8C42;
+      --orange-glow: rgba(255,140,66,0.1);
+      --text: #F0F6FF;
+      --text-soft: #8B9EC0;
+      --text-muted: #4A5E7A;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(10,15,26,0.88); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; }
+    .nav-logo-icon { width: 34px; height: 34px; background: var(--accent-glow); border: 1px solid rgba(181,245,66,0.4); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .nav-logo-text { font-size: 18px; font-weight: 900; color: var(--accent); letter-spacing: -0.01em; }
+    .nav-cta { background: var(--accent); color: var(--bg); border: none; border-radius: 10px; padding: 10px 20px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: opacity 0.15s; }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* HERO */
+    .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 100px 24px 60px; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
+    .hero-glow { position: absolute; top: 20%; left: 50%; transform: translateX(-50%); width: 600px; height: 600px; background: radial-gradient(circle, rgba(181,245,66,0.06) 0%, transparent 70%); pointer-events: none; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--accent-glow); border: 1px solid rgba(181,245,66,0.3); border-radius: 20px; padding: 7px 16px; font-size: 12px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 28px; }
+    .hero-title { font-size: clamp(36px, 7vw, 72px); font-weight: 900; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 20px; }
+    .hero-title span { color: var(--accent); }
+    .hero-subtitle { font-size: clamp(16px, 2.5vw, 20px); color: var(--text-soft); max-width: 520px; line-height: 1.6; margin-bottom: 40px; }
+    .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 60px; }
+    .btn-primary { background: var(--accent); color: var(--bg); border: none; border-radius: 14px; padding: 16px 32px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.15s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-secondary { background: transparent; color: var(--text-soft); border: 1px solid var(--border); border-radius: 14px; padding: 16px 32px; font-size: 16px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* PREVIEW MOCKUP */
+    .mockup-wrap { position: relative; width: 100%; max-width: 320px; margin: 0 auto; }
+    .mockup-phone { background: var(--card); border: 1px solid var(--border); border-radius: 28px; overflow: hidden; padding: 0; box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(181,245,66,0.1); }
+    .mockup-header { background: rgba(10,15,26,0.9); padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+    .mockup-logo { font-size: 14px; font-weight: 900; color: var(--accent); }
+    .mockup-club { font-size: 10px; color: var(--text-muted); }
+    .mockup-body { padding: 16px; }
+    .mockup-king { background: linear-gradient(135deg, rgba(255,140,66,0.1), rgba(181,245,66,0.08)); border: 1px solid rgba(255,140,66,0.3); border-radius: 14px; padding: 12px 14px; margin-bottom: 12px; position: relative; overflow: hidden; }
+    .mockup-king-emoji { position: absolute; top: -8px; right: -4px; font-size: 50px; opacity: 0.08; }
+    .mockup-king-label { font-size: 9px; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+    .mockup-king-name { font-size: 16px; font-weight: 900; color: var(--text); }
+    .mockup-king-sub { font-size: 10px; color: var(--text-muted); margin-top: 1px; }
+    .mockup-podium { display: flex; gap: 6px; align-items: flex-end; margin-bottom: 12px; }
+    .mockup-podium-item { flex: 1; text-align: center; }
+    .mockup-podium-avatar { width: 100%; aspect-ratio: 1; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 4px; font-size: 18px; border: 2px solid; }
+    .mockup-podium-name { font-size: 9px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 1px; }
+    .mockup-podium-pts { font-size: 13px; font-weight: 900; }
+    .mockup-podium-base { height: 50px; border-radius: 6px 6px 0 0; display: flex; align-items: flex-start; justify-content: center; padding-top: 6px; font-size: 12px; font-weight: 900; }
+    .mockup-player { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 6px; }
+    .mockup-player-num { width: 24px; height: 24px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: var(--text-muted); flex-shrink: 0; }
+    .mockup-player-info { flex: 1; }
+    .mockup-player-name { font-size: 12px; font-weight: 700; color: var(--text); }
+    .mockup-player-bar { height: 3px; background: var(--border); border-radius: 2px; margin-top: 4px; overflow: hidden; }
+    .mockup-player-pts { font-size: 14px; font-weight: 900; color: var(--accent); }
+    .mockup-streak { display: inline-flex; align-items: center; gap: 2px; background: rgba(181,245,66,0.1); border: 1px solid rgba(181,245,66,0.2); border-radius: 20px; padding: 1px 6px; font-size: 9px; font-weight: 800; color: var(--accent); margin-left: 4px; }
+    .mockup-nav { display: flex; background: rgba(17,24,39,0.95); border-top: 1px solid var(--border); }
+    .mockup-nav-item { flex: 1; padding: 10px 4px 8px; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 8px; font-weight: 600; color: var(--text-muted); }
+    .mockup-nav-item.active { color: var(--accent); }
+    .mockup-nav-dot { width: 20px; height: 2px; background: var(--accent); border-radius: 0 0 2px 2px; position: absolute; top: 0; }
+
+    /* STATS BAR */
+    .stats-bar { display: flex; justify-content: center; gap: 0; margin: 60px 0; padding: 0 24px; flex-wrap: wrap; }
+    .stat-item { text-align: center; padding: 20px 40px; border-right: 1px solid var(--border); }
+    .stat-item:last-child { border-right: none; }
+    .stat-num { font-size: 36px; font-weight: 900; color: var(--accent); line-height: 1; }
+    .stat-label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+    /* SECTION */
+    section { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
+    .section-badge { display: inline-block; background: var(--accent-glow); border: 1px solid rgba(181,245,66,0.3); border-radius: 20px; padding: 5px 14px; font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px; }
+    .section-title { font-size: clamp(28px, 5vw, 44px); font-weight: 900; letter-spacing: -0.02em; margin-bottom: 12px; }
+    .section-title span { color: var(--accent); }
+    .section-sub { font-size: 16px; color: var(--text-soft); max-width: 480px; line-height: 1.6; margin-bottom: 48px; }
+
+    /* FEATURES */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .feature-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 24px; transition: border-color 0.2s; }
+    .feature-card:hover { border-color: rgba(181,245,66,0.3); }
+    .feature-icon { width: 48px; height: 48px; background: var(--accent-glow); border: 1px solid rgba(181,245,66,0.2); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px; }
+    .feature-title { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .feature-desc { font-size: 14px; color: var(--text-soft); line-height: 1.6; }
+
+    /* HOW IT WORKS */
+    .steps { display: flex; flex-direction: column; gap: 0; position: relative; }
+    .steps::before { content: ''; position: absolute; left: 20px; top: 24px; bottom: 24px; width: 1px; background: linear-gradient(180deg, var(--accent), transparent); }
+    .step { display: flex; gap: 24px; padding: 24px 0; align-items: flex-start; }
+    .step-num { width: 40px; height: 40px; border-radius: 50%; background: var(--accent-glow); border: 1px solid rgba(181,245,66,0.4); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 900; color: var(--accent); flex-shrink: 0; position: relative; z-index: 1; }
+    .step-content { padding-top: 8px; }
+    .step-title { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .step-desc { font-size: 14px; color: var(--text-soft); line-height: 1.6; }
+
+    /* PRICING */
+    .pricing-card { background: var(--card); border: 1px solid rgba(181,245,66,0.3); border-radius: 24px; padding: 40px; max-width: 480px; margin: 0 auto; position: relative; overflow: hidden; text-align: center; }
+    .pricing-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
+    .pricing-badge { display: inline-block; background: var(--accent-glow); border: 1px solid rgba(181,245,66,0.3); border-radius: 20px; padding: 4px 14px; font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 20px; }
+    .pricing-price { font-size: 64px; font-weight: 900; color: var(--accent); line-height: 1; letter-spacing: -0.03em; }
+    .pricing-currency { font-size: 28px; font-weight: 700; vertical-align: top; margin-top: 12px; display: inline-block; }
+    .pricing-period { font-size: 14px; color: var(--text-muted); margin: 8px 0 28px; }
+    .pricing-features { list-style: none; text-align: left; margin-bottom: 32px; display: flex; flex-direction: column; gap: 12px; }
+    .pricing-feature { display: flex; align-items: center; gap: 12px; font-size: 15px; color: var(--text-soft); }
+    .pricing-check { width: 22px; height: 22px; background: var(--accent-glow); border: 1px solid rgba(181,245,66,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; }
+
+    /* TESTIMONIAL placeholder */
+    .testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+    .testimonial { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 24px; }
+    .testimonial-text { font-size: 15px; color: var(--text-soft); line-height: 1.7; margin-bottom: 16px; font-style: italic; }
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .testimonial-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent-glow); border: 1px solid rgba(181,245,66,0.2); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .testimonial-name { font-size: 14px; font-weight: 700; color: var(--text); }
+    .testimonial-club { font-size: 12px; color: var(--text-muted); }
+    .stars { color: var(--accent); font-size: 13px; margin-bottom: 12px; }
+
+    /* FAQ */
+    .faq { display: flex; flex-direction: column; gap: 10px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px 24px; cursor: pointer; transition: border-color 0.2s; }
+    .faq-item:hover { border-color: rgba(181,245,66,0.2); }
+    .faq-q { font-size: 15px; font-weight: 700; color: var(--text); display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .faq-a { font-size: 14px; color: var(--text-soft); line-height: 1.7; margin-top: 12px; display: none; }
+    .faq-item.open .faq-a { display: block; }
+    .faq-item.open { border-color: rgba(181,245,66,0.3); }
+    .faq-arrow { color: var(--accent); font-size: 18px; transition: transform 0.2s; flex-shrink: 0; }
+    .faq-item.open .faq-arrow { transform: rotate(45deg); }
+
+    /* CTA FINAL */
+    .cta-section { background: linear-gradient(135deg, rgba(181,245,66,0.08), rgba(255,140,66,0.05)); border: 1px solid rgba(181,245,66,0.2); border-radius: 28px; padding: 60px 40px; text-align: center; margin: 0 24px 80px; position: relative; overflow: hidden; }
+    .cta-section::before { content: '🎾'; position: absolute; font-size: 200px; opacity: 0.03; top: -40px; right: -40px; }
+    .cta-title { font-size: clamp(26px, 5vw, 42px); font-weight: 900; letter-spacing: -0.02em; margin-bottom: 12px; }
+    .cta-sub { font-size: 16px; color: var(--text-soft); margin-bottom: 32px; }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 32px 24px; text-align: center; color: var(--text-muted); font-size: 13px; }
+    footer strong { color: var(--accent); }
+
+    /* WA BUTTON */
+    .wa-btn { display: inline-flex; align-items: center; gap: 10px; background: #25D366; color: white; border: none; border-radius: 14px; padding: 16px 32px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.15s; text-decoration: none; }
+    .wa-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .wa-btn svg { width: 22px; height: 22px; fill: white; }
+
+    /* DEMO LINK */
+    .demo-link { display: inline-flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 18px; font-size: 13px; color: var(--text-soft); margin-top: 16px; }
+    .demo-link span { color: var(--accent); font-weight: 700; }
+
+    @media (max-width: 640px) {
+      .stat-item { padding: 16px 20px; }
+      .stat-num { font-size: 28px; }
+      .pricing-card { padding: 28px 20px; }
+      .cta-section { padding: 40px 20px; margin: 0 16px 60px; }
+      nav { padding: 12px 16px; }
+      .hero-ctas { flex-direction: column; align-items: center; }
+      .btn-primary, .btn-secondary { width: 100%; max-width: 280px; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon">🎾</div>
+    <span class="nav-logo-text">Ranketa</span>
+  </div>
+  <a href="https://wa.me/543855007321?text=Hola%2C%20quiero%20saber%20más%20sobre%20Ranketa%20para%20mi%20cancha" target="_blank">
+    <button class="nav-cta">Quiero Ranketa →</button>
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-badge">🏆 Sistema de ranking profesional</div>
+  <h1 class="hero-title">El ranking de pádel<br />que tu cancha<br /><span>se merece</span></h1>
+  <p class="hero-subtitle">Tus jugadores compiten, suman puntos y siguen el ranking en tiempo real desde el celular. Sin apps que instalar, sin mensualidades.</p>
+  <div class="hero-ctas">
+    <a href="https://wa.me/543855007321?text=Hola%2C%20quiero%20saber%20más%20sobre%20Ranketa%20para%20mi%20cancha" target="_blank">
+      <button class="btn-primary">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Quiero Ranketa para mi cancha
+      </button>
+    </a>
+    <a href="https://ranketa.vercel.app/?club=demo" target="_blank">
+      <button class="btn-secondary">Ver demo en vivo →</button>
+    </a>
+  </div>
+
+  <!-- MOCKUP -->
+  <div class="mockup-wrap">
+    <div class="mockup-phone">
+      <div class="mockup-header">
+        <div>
+          <div class="mockup-logo">Ranketa</div>
+          <div class="mockup-club">Club Norte Pádel · 8J · 24P</div>
+        </div>
+        <div style="font-size:11px;color:#4A5E7A;">Admin</div>
+      </div>
+      <div class="mockup-body">
+        <!-- Rey -->
+        <div class="mockup-king">
+          <div class="mockup-king-emoji">👑</div>
+          <div class="mockup-king-label">👑 Rey de la cancha</div>
+          <div class="mockup-king-name">Martín G.</div>
+          <div class="mockup-king-sub">12 victorias · 83% efectividad</div>
+        </div>
+        <!-- Podio -->
+        <div class="mockup-podium">
+          <div class="mockup-podium-item">
+            <div class="mockup-podium-avatar" style="border-color:#C0C0C0;background:rgba(192,192,192,0.1);width:42px;height:42px;">🥈</div>
+            <div class="mockup-podium-name">Carlos</div>
+            <div class="mockup-podium-pts" style="color:#C0C0C0;">87</div>
+            <div style="font-size:9px;color:#4A5E7A;">pts</div>
+            <div class="mockup-podium-base" style="background:rgba(192,192,192,0.1);border:1px solid rgba(192,192,192,0.2);height:44px;border-radius:6px 6px 0 0;display:flex;align-items:center;justify-content:center;"><span style="font-size:14px;font-weight:900;color:rgba(192,192,192,0.4);">#2</span></div>
+          </div>
+          <div class="mockup-podium-item">
+            <div class="mockup-podium-avatar" style="border-color:#FFD700;background:rgba(255,215,0,0.1);width:52px;height:52px;">🥇</div>
+            <div class="mockup-podium-name" style="font-size:11px;">Martín</div>
+            <div class="mockup-podium-pts" style="color:#FFD700;font-size:17px;">124</div>
+            <div style="font-size:9px;color:#4A5E7A;">pts</div>
+            <div class="mockup-podium-base" style="background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.2);height:58px;border-radius:6px 6px 0 0;display:flex;align-items:center;justify-content:center;"><span style="font-size:14px;font-weight:900;color:rgba(255,215,0,0.4);">#1</span></div>
+          </div>
+          <div class="mockup-podium-item">
+            <div class="mockup-podium-avatar" style="border-color:#CD7F32;background:rgba(205,127,50,0.1);width:42px;height:42px;">🥉</div>
+            <div class="mockup-podium-name">Lucas</div>
+            <div class="mockup-podium-pts" style="color:#CD7F32;">71</div>
+            <div style="font-size:9px;color:#4A5E7A;">pts</div>
+            <div class="mockup-podium-base" style="background:rgba(205,127,50,0.1);border:1px solid rgba(205,127,50,0.2);height:34px;border-radius:6px 6px 0 0;display:flex;align-items:center;justify-content:center;"><span style="font-size:14px;font-weight:900;color:rgba(205,127,50,0.4);">#3</span></div>
+          </div>
+        </div>
+        <!-- Players -->
+        <div class="mockup-player">
+          <div class="mockup-player-num">4</div>
+          <div class="mockup-player-info">
+            <div class="mockup-player-name">Diego R. <span class="mockup-streak">↑3V</span></div>
+            <div class="mockup-player-bar"><div style="height:100%;width:58%;background:#3B82F6;border-radius:2px;"></div></div>
+          </div>
+          <div class="mockup-player-pts">58</div>
+        </div>
+        <div class="mockup-player">
+          <div class="mockup-player-num">5</div>
+          <div class="mockup-player-info">
+            <div class="mockup-player-name">Pablo M.</div>
+            <div class="mockup-player-bar"><div style="height:100%;width:42%;background:#FF4D6A;border-radius:2px;"></div></div>
+          </div>
+          <div class="mockup-player-pts">44</div>
+        </div>
+      </div>
+      <div class="mockup-nav">
+        <div class="mockup-nav-item active" style="position:relative;">
+          <div class="mockup-nav-dot"></div>
+          <span>🏆</span><span>Ranking</span>
+        </div>
+        <div class="mockup-nav-item"><span>📋</span><span>Partidos</span></div>
+        <div class="mockup-nav-item"><span>🛡️</span><span>Admin</span></div>
+      </div>
+    </div>
+    <div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:radial-gradient(circle,rgba(181,245,66,0.3),transparent);border-radius:50%;filter:blur(20px);pointer-events:none;"></div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">Sin mensualidades</div></div>
+  <div class="stat-item"><div class="stat-num">0</div><div class="stat-label">Apps que instalar</div></div>
+  <div class="stat-item"><div class="stat-num">∞</div><div class="stat-label">Jugadores ilimitados</div></div>
+  <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-label">Disponible siempre</div></div>
+</div>
+
+<!-- FEATURES -->
+<section>
+  <div class="section-badge">✨ Funcionalidades</div>
+  <h2 class="section-title">Todo lo que tu cancha <span>necesita</span></h2>
+  <p class="section-sub">Diseñado para que los jugadores quieran volver a jugar una y otra vez.</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">👑</div>
+      <div class="feature-title">Rey de la cancha</div>
+      <div class="feature-desc">El jugador con más victorias del mes se corona automáticamente. Genera competencia y hace que todos quieran jugar más.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔥</div>
+      <div class="feature-title">Racha de victorias</div>
+      <div class="feature-desc">Cada jugador muestra su racha actual. 3V seguidas, 5V seguidas... el que está en racha quiere mantenerla y el resto quiere cortarla.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <div class="feature-title">Estadísticas completas</div>
+      <div class="feature-desc">Puntos, victorias, derrotas, % de efectividad y posición en el ranking. Cada jugador puede ver su evolución en tiempo real.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏆</div>
+      <div class="feature-title">Podio visual</div>
+      <div class="feature-desc">Los tres mejores jugadores aparecen en un podio con medallas de oro, plata y bronce. Como el circuito profesional.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-title">Tiempo real</div>
+      <div class="feature-desc">Cuando el admin carga un partido, el ranking se actualiza al instante en todos los celulares. Sin recargar la página.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📱</div>
+      <div class="feature-title">Sin apps que instalar</div>
+      <div class="feature-desc">Los jugadores abren el link desde el celu y ya está. Funciona en iOS y Android. Se puede guardar en la pantalla de inicio como app.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <div class="feature-title">Sistema de puntos profesional</div>
+      <div class="feature-desc">Basado en el circuito profesional de pádel. Victoria 2-0 vale más que 2-1. Los perdedores también suman puntos.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔐</div>
+      <div class="feature-title">Panel admin exclusivo</div>
+      <div class="feature-desc">Solo vos y el dueño de la cancha pueden cargar partidos y gestionar jugadores. Los jugadores solo ven el ranking.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎨</div>
+      <div class="feature-title">Personalizado para tu cancha</div>
+      <div class="feature-desc">Cada cancha tiene su propio link con su nombre. Diseño premium oscuro que se ve increíble en cualquier celular.</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section style="background:var(--surface);border-radius:28px;margin:0 0 0 0;padding:60px 40px;">
+  <div style="max-width:600px;">
+    <div class="section-badge">⚙️ Cómo funciona</div>
+    <h2 class="section-title">Listo en <span>menos de 5 minutos</span></h2>
+    <p class="section-sub">Sin instalar nada, sin configuraciones complicadas.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Me contactás por WhatsApp</div>
+          <div class="step-desc">Me decís el nombre de tu cancha y acordamos el pago. Único pago, sin sorpresas.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Te creo tu Ranketa personalizada</div>
+          <div class="step-desc">En menos de 24 horas tenés tu link listo: ranketa.vercel.app/?club=tu-cancha</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Cargás tus jugadores</div>
+          <div class="step-desc">Entrás al panel admin y agregás los jugadores de tu cancha. Tarda 2 minutos.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">Compartís el link y listo</div>
+          <div class="step-desc">Mandás el link por el grupo de WhatsApp de tu cancha. Todos pueden ver el ranking desde ese momento.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section style="text-align:center;">
+  <div class="section-badge">💰 Precio</div>
+  <h2 class="section-title" style="margin-bottom:12px;">Un solo pago, <span>para siempre</span></h2>
+  <p class="section-sub" style="margin:0 auto 48px;">Sin mensualidades. Sin sorpresas. Pagás una vez y Ranketa es tuya.</p>
+  <div class="pricing-card">
+    <div class="pricing-badge">Pago único</div>
+    <div class="pricing-price"><span class="pricing-currency">$</span>100<span style="font-size:24px;color:var(--text-soft);font-weight:600;"> USD</span></div>
+    <div class="pricing-period">Pago único · Sin mensualidades · Para siempre</div>
+    <ul class="pricing-features">
+      <li class="pricing-feature"><div class="pricing-check">✓</div>Ranking ilimitado de jugadores</li>
+      <li class="pricing-feature"><div class="pricing-check">✓</div>Historial completo de partidos</li>
+      <li class="pricing-feature"><div class="pricing-check">✓</div>Rey de la cancha automático</li>
+      <li class="pricing-feature"><div class="pricing-check">✓</div>Racha de victorias en tiempo real</li>
+      <li class="pricing-feature"><div class="pricing-check">✓</div>Estadísticas y % de efectividad</li>
+      <li class="pricing-feature"><div class="pricing-check">✓</div>Panel admin protegido con contraseña</li>
+      <li class="pricing-feature"><div class="pricing-check">✓</div>Funciona en iOS y Android</li>
+      <li class="pricing-feature"><div class="pricing-check">✓</div>Actualizaciones en tiempo real</li>
+      <li class="pricing-feature"><div class="pricing-check">✓</div>Link personalizado para tu cancha</li>
+      <li class="pricing-feature"><div class="pricing-check">✓</div>Soporte por WhatsApp</li>
+    </ul>
+    <a href="https://wa.me/543855007321?text=Hola%2C%20quiero%20Ranketa%20para%20mi%20cancha%20de%20pádel" target="_blank">
+      <button class="btn-primary" style="width:100%;justify-content:center;font-size:17px;padding:18px;">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Quiero Ranketa — $100 USD
+      </button>
+    </a>
+    <a href="https://ranketa.vercel.app/?club=demo" target="_blank" class="demo-link" style="display:flex;justify-content:center;margin-top:14px;">
+      👀 Ver demo antes de comprar → <span style="margin-left:4px;">ranketa.vercel.app/?club=demo</span>
+    </a>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section>
+  <div class="section-badge">❓ Preguntas frecuentes</div>
+  <h2 class="section-title" style="margin-bottom:40px;">Todo lo que querés <span>saber</span></h2>
+  <div class="faq">
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">¿Los jugadores tienen que instalar algo? <span class="faq-arrow">+</span></div>
+      <div class="faq-a">No. Los jugadores abren el link desde el navegador de su celular y ya pueden ver el ranking. Funciona en iOS y Android sin instalar ninguna app. Si quieren, pueden guardar el link en la pantalla de inicio para acceder más rápido.</div>
+    </div>
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">¿Cuántos jugadores puede tener mi cancha? <span class="faq-arrow">+</span></div>
+      <div class="faq-a">Jugadores ilimitados. No hay límite de jugadores ni de partidos. Podés agregar todos los socios de tu cancha sin ningún costo adicional.</div>
+    </div>
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">¿Hay algún costo mensual? <span class="faq-arrow">+</span></div>
+      <div class="faq-a">No. El pago es único de $100 USD y Ranketa es tuya para siempre. Sin sorpresas, sin suscripciones, sin costos ocultos.</div>
+    </div>
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">¿Quién puede cargar los partidos? <span class="faq-arrow">+</span></div>
+      <div class="faq-a">Solo el admin de la cancha (vos, el dueño) puede cargar partidos y gestionar jugadores con una contraseña privada. Los jugadores solo pueden ver el ranking.</div>
+    </div>
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">¿En cuánto tiempo tengo mi Ranketa lista? <span class="faq-arrow">+</span></div>
+      <div class="faq-a">En menos de 24 horas después del pago te entrego el link personalizado de tu cancha con todo configurado y listo para usar.</div>
+    </div>
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">¿Puedo ver cómo funciona antes de comprar? <span class="faq-arrow">+</span></div>
+      <div class="faq-a">Sí. Podés ver la demo en vivo en ranketa.vercel.app/?club=demo. Ahí podés explorar todas las funcionalidades de Ranketa antes de decidir.</div>
+    </div>
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">¿Cómo se calculan los puntos? <span class="faq-arrow">+</span></div>
+      <div class="faq-a">El sistema está basado en el circuito profesional de pádel. Victoria 2-0 (dominante): ganadores +10 pts, perdedores +2 pts. Victoria 2-1 (parejo): ganadores +7 pts, perdedores +4 pts. Hasta los perdedores suman puntos por competir.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<div class="cta-section" style="max-width:1100px;margin:0 auto 80px;">
+  <h2 class="cta-title">¿Listo para tener el ranking<br />que tu cancha merece?</h2>
+  <p class="cta-sub">Escribime por WhatsApp y en menos de 24 horas tu cancha tiene su Ranketa.</p>
+  <a href="https://wa.me/543855007321?text=Hola%2C%20quiero%20Ranketa%20para%20mi%20cancha%20de%20pádel" target="_blank" class="wa-btn">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Escribime por WhatsApp
+  </a>
+  <div style="margin-top:16px;font-size:13px;color:var(--text-muted);">O probá la demo primero: <a href="https://ranketa.vercel.app/?club=demo" target="_blank" style="color:var(--accent);font-weight:700;">ranketa.vercel.app/?club=demo</a></div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div style="font-size:20px;font-weight:900;color:var(--accent);margin-bottom:8px;">Ranketa 🎾</div>
+  <div style="margin-bottom:8px;">El sistema de ranking de pádel para canchas profesionales</div>
+  <div>Hecho con ❤️ en Argentina · <a href="https://wa.me/543855007321" target="_blank" style="color:var(--accent);">WhatsApp</a></div>
+</footer>
+
+</body>
+</html>
