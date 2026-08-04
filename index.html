@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ranketa · Pádel Santiago del Estero</title>
-  <meta name="description" content="La app de pádel de Santiago del Estero. Organizá partidos, encontrá jugadores de tu nivel y seguí tu ranking en tiempo real."/>
+  <title>Ranketa · La app de pádel de Santiago del Estero</title>
+  <meta name="description" content="Organizá partidos, encontrá jugadores de tu nivel, seguí el ranking y competí en torneos. La app de pádel de Santiago del Estero."/>
   <meta property="og:title" content="Ranketa · Pádel SdE"/>
-  <meta property="og:description" content="Organizá partidos de pádel, encontrá jugadores de tu nivel y seguí tu ranking."/>
+  <meta property="og:description" content="La app de pádel de Santiago del Estero. Gratis, sin publicidad, hecha para jugadores reales."/>
   <meta property="og:image" content="https://app.ranketa.lat/icon-512.png"/>
+  <meta property="og:url" content="https://ranketa.lat"/>
   <meta name="theme-color" content="#050E09"/>
   <link rel="icon" href="https://app.ranketa.lat/favicon.svg" type="image/svg+xml"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -18,165 +19,441 @@
     :root {
       --bg: #050E09;
       --surface: #0A1A0F;
-      --card: #0F2016;
+      --card: #0D1F10;
       --border: #1A3020;
       --accent: #00C875;
-      --accent-dark: #009A5A;
-      --accent-glow: rgba(0,200,117,0.12);
+      --accent2: #009A5A;
+      --glow: rgba(0,200,117,0.12);
       --text: #F0FFF5;
-      --text-soft: #6A9A7A;
-      --text-muted: #3A5A45;
-      --orange: #FF7A35;
+      --soft: #6A9A7A;
+      --muted: #3A5A45;
+      --gold: #F59E0B;
+      --red: #EF4444;
     }
     html { scroll-behavior: smooth; }
     body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 
-    /* NAV */
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; background: rgba(5,14,9,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
-    .nav-logo { font-size: 20px; font-weight: 900; color: var(--text); letter-spacing: -0.03em; text-decoration: none; }
-    .nav-logo span { color: var(--accent); }
+    /* ── NAV ── */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; background: rgba(5,14,9,0.88); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+    .logo { font-size: 20px; font-weight: 900; color: var(--text); text-decoration: none; letter-spacing: -0.03em; }
+    .logo span { color: var(--accent); }
     .nav-links { display: flex; align-items: center; gap: 24px; }
-    .nav-links a { color: var(--text-soft); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+    .nav-links a { color: var(--soft); text-decoration: none; font-size: 14px; font-weight: 500; transition: color .2s; }
     .nav-links a:hover { color: var(--text); }
-    .nav-cta { background: var(--accent); color: var(--bg) !important; padding: 9px 20px; border-radius: 10px; font-weight: 700 !important; font-size: 14px !important; transition: all 0.2s !important; }
+    .nav-cta { background: var(--accent) !important; color: var(--bg) !important; padding: 9px 20px; border-radius: 10px; font-weight: 700 !important; transition: all .2s !important; }
     .nav-cta:hover { background: #00E088 !important; transform: translateY(-1px); }
+    @media(max-width:600px) { .nav-links { display: none; } }
 
-    /* HERO */
+    /* ── UTILS ── */
+    .section { padding: 100px 24px; max-width: 1100px; margin: 0 auto; }
+    .tag { display: inline-flex; align-items: center; gap: 6px; background: var(--glow); border: 1px solid rgba(0,200,117,0.25); border-radius: 20px; padding: 5px 14px; font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 18px; }
+    .h1 { font-size: clamp(36px,7vw,72px); font-weight: 900; line-height: 1.05; letter-spacing: -0.03em; }
+    .h2 { font-size: clamp(28px,4vw,48px); font-weight: 900; letter-spacing: -0.025em; }
+    .h3 { font-size: 20px; font-weight: 800; }
+    .sub { font-size: 18px; color: var(--soft); line-height: 1.7; max-width: 580px; }
+    .divider { width: 100%; height: 1px; background: var(--border); max-width: 1100px; margin: 0 auto; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; border-radius: 12px; font-size: 16px; font-weight: 700; text-decoration: none; transition: all .2s; }
+    .btn-green { background: var(--accent); color: var(--bg); }
+    .btn-green:hover { background: #00E088; transform: translateY(-2px); box-shadow: 0 16px 40px rgba(0,200,117,0.3); }
+    .btn-ghost { background: rgba(255,255,255,0.05); color: var(--soft); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.09); color: var(--text); }
+
+    /* reveal */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── HERO ── */
     .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 120px 24px 80px; text-align: center; position: relative; overflow: hidden; }
-    .hero-glow { position: absolute; top: 20%; left: 50%; transform: translateX(-50%); width: 600px; height: 400px; background: radial-gradient(ellipse, rgba(0,200,117,0.08) 0%, transparent 70%); pointer-events: none; }
-    .hero-glow-2 { position: absolute; bottom: 10%; left: 20%; width: 300px; height: 300px; background: radial-gradient(ellipse, rgba(0,200,117,0.05) 0%, transparent 70%); pointer-events: none; }
-    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--accent-glow); border: 1px solid rgba(0,200,117,0.25); border-radius: 20px; padding: 6px 14px; font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 24px; }
-    .hero h1 { font-size: clamp(36px, 7vw, 72px); font-weight: 900; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 20px; color: var(--text); }
+    .hero-glow { position: absolute; top: 15%; left: 50%; transform: translateX(-50%); width: 700px; height: 500px; background: radial-gradient(ellipse, rgba(0,200,117,0.09) 0%, transparent 70%); pointer-events: none; }
+    .hero h1 { color: var(--text); margin-bottom: 20px; }
     .hero h1 span { color: var(--accent); }
-    .hero-sub { font-size: clamp(16px, 2.5vw, 20px); color: var(--text-soft); max-width: 560px; line-height: 1.7; margin: 0 auto 36px; }
-    .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 60px; }
-    .btn-primary { background: var(--accent); color: var(--bg); padding: 14px 28px; border-radius: 12px; font-size: 16px; font-weight: 700; text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
-    .btn-primary:hover { background: #00E088; transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,200,117,0.25); }
-    .btn-secondary { background: rgba(255,255,255,0.06); color: var(--text-soft); padding: 14px 28px; border-radius: 12px; font-size: 16px; font-weight: 600; text-decoration: none; border: 1px solid var(--border); transition: all 0.2s; }
-    .btn-secondary:hover { background: rgba(255,255,255,0.1); color: var(--text); }
-    .hero-stats { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; }
-    .hero-stat { text-align: center; }
-    .hero-stat-val { font-size: 28px; font-weight: 900; color: var(--accent); }
-    .hero-stat-label { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+    .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin: 36px 0 64px; }
+    .hero-stats { display: flex; gap: 48px; justify-content: center; flex-wrap: wrap; }
+    .hs-val { font-size: 32px; font-weight: 900; color: var(--accent); }
+    .hs-label { font-size: 13px; color: var(--muted); margin-top: 3px; }
 
-    /* PHONE MOCKUP */
-    .phone-section { padding: 80px 24px; display: flex; justify-content: center; }
-    .phone { width: 260px; background: #0A1A0F; border-radius: 36px; border: 2px solid var(--border); overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,0.5); position: relative; }
-    .phone-notch { width: 80px; height: 24px; background: #050E09; border-radius: 0 0 16px 16px; margin: 0 auto; }
-    .phone-screen { padding: 12px; }
-    .phone-card { background: #0F2016; border: 1px solid rgba(0,200,117,0.2); border-radius: 14px; padding: 12px; margin-bottom: 8px; }
-    .phone-card-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-    .phone-card-sub { font-size: 11px; color: var(--text-soft); }
-    .phone-badge { display: inline-block; background: rgba(0,200,117,0.15); color: var(--accent); border-radius: 8px; padding: 2px 8px; font-size: 10px; font-weight: 700; margin-bottom: 6px; }
-    .phone-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-top: 8px; }
-    .phone-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; }
-    .phone-nav { display: flex; justify-content: space-around; padding: 10px 8px 6px; border-top: 1px solid var(--border); }
-    .phone-nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 9px; color: var(--text-muted); }
-    .phone-nav-item.active { color: var(--accent); }
-    .phone-nav-dot { width: 18px; height: 2px; background: var(--accent); border-radius: 1px; margin-bottom: 2px; }
+    /* ── PHONE MOCKUP ── */
+    .phone-wrap { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; padding: 20px 0; }
+    .phone { width: 240px; background: #060E08; border-radius: 36px; border: 2px solid #1a3020; overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px #0f2014; flex-shrink: 0; }
+    .phone-sm { width: 200px; border-radius: 30px; margin-top: 40px; opacity: 0.85; }
+    .notch { width: 70px; height: 20px; background: #050E09; border-radius: 0 0 14px 14px; margin: 0 auto; }
+    .pscreen { padding: 10px; }
 
-    /* FEATURES */
-    section { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
-    .section-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--accent-glow); border: 1px solid rgba(0,200,117,0.2); border-radius: 20px; padding: 5px 12px; font-size: 12px; font-weight: 600; color: var(--accent); margin-bottom: 16px; }
-    .section-title { font-size: clamp(28px, 4vw, 44px); font-weight: 900; letter-spacing: -0.02em; color: var(--text); margin-bottom: 12px; }
-    .section-sub { font-size: 17px; color: var(--text-soft); line-height: 1.7; max-width: 560px; }
-    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 48px; }
-    .feat-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 24px; transition: all 0.25s; }
-    .feat-card:hover { border-color: rgba(0,200,117,0.3); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
-    .feat-icon { width: 44px; height: 44px; background: var(--accent-glow); border: 1px solid rgba(0,200,117,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px; }
+    /* screen: partidos */
+    .ps-header { background: #0A1A0F; border-bottom: 1px solid #1a3020; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; margin: -10px -10px 10px; }
+    .ps-title { color: #F0FFF5; font-size: 16px; font-weight: 900; }
+    .ps-plus { background: #00C875; border: none; border-radius: 10px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: #050E09; font-size: 18px; font-weight: 900; cursor: pointer; }
+    .ps-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 10px; }
+    .ps-stat { background: #0A1A0F; border: 0.5px solid #1a3020; border-radius: 10px; padding: 6px; text-align: center; }
+    .ps-stat-n { color: #00C875; font-size: 14px; font-weight: 900; }
+    .ps-stat-l { color: #3A6B4A; font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 1px; }
+    .ps-game { background: #0A1A0F; border: 0.5px solid #1a3020; border-radius: 12px; padding: 10px; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+    .ps-game-date { text-align: center; min-width: 28px; }
+    .ps-game-day { color: #00C875; font-size: 13px; font-weight: 900; line-height: 1; }
+    .ps-game-mon { color: #3A6B4A; font-size: 8px; font-weight: 700; text-transform: uppercase; }
+    .ps-div { width: 1px; height: 30px; background: #1a3020; }
+    .ps-body { flex: 1; }
+    .ps-venue { color: #F0FFF5; font-size: 11px; font-weight: 700; }
+    .ps-meta { color: #3A6B4A; font-size: 9px; }
+    .ps-pill { display: inline-block; background: rgba(0,200,117,0.1); border: 0.5px solid rgba(0,200,117,0.3); border-radius: 5px; padding: 1px 5px; font-size: 8px; color: #00C875; font-weight: 700; margin-top: 3px; }
+    .ps-spots { text-align: right; }
+    .ps-spots-n { color: #00C875; font-size: 12px; font-weight: 900; }
+    .ps-spots-l { color: #3A6B4A; font-size: 8px; font-weight: 700; text-transform: uppercase; }
+    .ps-full { color: #EF4444; font-size: 10px; font-weight: 700; }
+    .pnav { display: flex; justify-content: space-around; padding: 8px 6px 4px; border-top: 1px solid #1a3020; margin: 6px -10px -10px; }
+    .pnav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    .pnav-icon { font-size: 16px; color: #1a3020; }
+    .pnav-icon.a { color: #00C875; }
+    .pnav-label { font-size: 7px; color: #1a3020; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .pnav-label.a { color: #00C875; }
+    .pnav-dot { width: 4px; height: 4px; border-radius: 50%; background: #00C875; }
+
+    /* screen: ranking */
+    .pr-podium { display: flex; align-items: flex-end; justify-content: center; gap: 6px; padding: 10px 0 0; }
+    .pr-slot { display: flex; flex-direction: column; align-items: center; }
+    .pr-av { border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 12px; }
+    .pr-av-1 { width: 52px; height: 52px; background: linear-gradient(135deg,#F59E0B,#D97706); color: #050E09; box-shadow: 0 0 16px rgba(245,158,11,0.4); }
+    .pr-av-2 { width: 40px; height: 40px; background: #1a2e1e; color: #9CA3AF; border: 1.5px solid #4B5563; }
+    .pr-av-3 { width: 36px; height: 36px; background: #1a2e1e; color: #B45309; border: 1.5px solid #3B1A00; }
+    .pr-name { color: #F0FFF5; font-size: 9px; font-weight: 700; margin-top: 5px; margin-bottom: 2px; }
+    .pr-pts { font-size: 8px; font-weight: 800; margin-bottom: 4px; }
+    .pr-bar { width: 100%; border-radius: 6px 6px 0 0; display: flex; align-items: flex-start; justify-content: center; padding-top: 5px; }
+    .pr-bar-1 { height: 56px; min-width: 70px; background: rgba(245,158,11,0.15); border: 0.5px solid rgba(245,158,11,0.3); }
+    .pr-bar-2 { height: 40px; min-width: 60px; background: rgba(107,114,128,0.12); border: 0.5px solid rgba(107,114,128,0.2); }
+    .pr-bar-3 { height: 28px; min-width: 56px; background: rgba(120,53,15,0.12); border: 0.5px solid rgba(120,53,15,0.2); }
+    .pr-num { font-size: 10px; color: rgba(255,255,255,0.15); font-weight: 900; }
+    .pr-row { display: flex; align-items: center; gap: 6px; padding: 6px 0; border-bottom: 0.5px solid #0F2014; }
+    .pr-row-av { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 800; flex-shrink: 0; }
+    .pr-row-body { flex: 1; }
+    .pr-row-name { color: #F0FFF5; font-size: 10px; font-weight: 700; }
+    .pr-row-meta { color: #3A6B4A; font-size: 8px; }
+    .pr-row-pts { color: #00C875; font-size: 11px; font-weight: 900; }
+
+    /* ── FEATURES GRID ── */
+    .feat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 52px; }
+    .feat { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 26px; transition: all .25s; }
+    .feat:hover { border-color: rgba(0,200,117,0.35); transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.35); }
+    .feat-icon { font-size: 28px; margin-bottom: 16px; }
     .feat-title { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
-    .feat-desc { font-size: 14px; color: var(--text-soft); line-height: 1.6; }
+    .feat-desc { font-size: 14px; color: var(--soft); line-height: 1.65; }
+    .feat-badge { display: inline-block; margin-top: 12px; background: var(--glow); border: 0.5px solid rgba(0,200,117,0.3); border-radius: 8px; padding: 3px 10px; font-size: 11px; color: var(--accent); font-weight: 700; }
 
-    /* HOW IT WORKS */
-    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0; margin-top: 48px; position: relative; }
-    .step { text-align: center; padding: 0 20px; position: relative; }
-    .step:not(:last-child)::after { content: '→'; position: absolute; right: -12px; top: 20px; font-size: 20px; color: var(--text-muted); }
-    .step-num { width: 44px; height: 44px; background: var(--accent-glow); border: 1.5px solid rgba(0,200,117,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; color: var(--accent); margin: 0 auto 16px; }
-    .step-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
-    .step-desc { font-size: 14px; color: var(--text-soft); line-height: 1.6; }
+    /* ── SCREENSHOTS SECTION ── */
+    .screenshots { display: flex; gap: 20px; justify-content: center; align-items: flex-start; flex-wrap: wrap; padding: 40px 0; }
+    .screenshot-item { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .screenshot-label { font-size: 13px; font-weight: 700; color: var(--soft); text-align: center; }
+    .screenshot-badge { font-size: 11px; color: var(--accent); font-weight: 700; background: var(--glow); border: 0.5px solid rgba(0,200,117,0.3); border-radius: 20px; padding: 3px 10px; }
 
-    /* TESTIMONIALS */
-    .testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 48px; }
+    /* ── HOW IT WORKS ── */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 52px; }
+    .step { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 24px; text-align: center; }
+    .step-num { width: 44px; height: 44px; border-radius: 50%; background: var(--glow); border: 1.5px solid rgba(0,200,117,0.3); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; color: var(--accent); margin: 0 auto 16px; }
+    .step-title { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+    .step-desc { font-size: 14px; color: var(--soft); line-height: 1.6; }
+
+    /* ── PREMIUM ── */
+    .premium-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 52px; }
+    @media(max-width:600px) { .premium-grid { grid-template-columns: 1fr; } }
+    .plan { border-radius: 24px; padding: 32px; border: 1.5px solid var(--border); }
+    .plan-free { background: var(--card); }
+    .plan-premium { background: linear-gradient(135deg, #1a1000, #0D1F10); border-color: rgba(245,158,11,0.4); position: relative; overflow: hidden; }
+    .plan-premium::before { content: ''; position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: radial-gradient(ellipse, rgba(245,158,11,0.08) 0%, transparent 70%); pointer-events: none; }
+    .plan-badge { display: inline-block; background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.3); border-radius: 20px; padding: 4px 12px; font-size: 11px; font-weight: 800; color: var(--gold); margin-bottom: 16px; }
+    .plan-name { font-size: 22px; font-weight: 900; color: var(--text); margin-bottom: 6px; }
+    .plan-price { font-size: 36px; font-weight: 900; color: var(--accent); line-height: 1; margin-bottom: 4px; }
+    .plan-price-gold { color: var(--gold); }
+    .plan-period { font-size: 13px; color: var(--soft); margin-bottom: 24px; }
+    .plan-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    .plan-feat { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--soft); }
+    .plan-feat-check { color: var(--accent); font-size: 16px; flex-shrink: 0; line-height: 1.2; }
+    .plan-feat-check-gold { color: var(--gold); }
+    .plan-feat-x { color: var(--muted); }
+    .plan-btn { display: block; text-align: center; padding: 13px 24px; border-radius: 12px; font-size: 15px; font-weight: 700; text-decoration: none; }
+    .plan-btn-free { background: rgba(255,255,255,0.06); color: var(--soft); border: 1px solid var(--border); }
+    .plan-btn-gold { background: linear-gradient(135deg,#F59E0B,#B45309); color: #fff; }
+    .plan-btn-gold:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(245,158,11,0.3); }
+
+    /* ── CANCHAS ── */
+    .canchas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 48px; }
+    .cancha-card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 20px; display: flex; gap: 14px; align-items: center; transition: all .25s; }
+    .cancha-card:hover { border-color: rgba(0,200,117,0.3); transform: translateY(-3px); }
+    .cancha-icon { width: 48px; height: 48px; border-radius: 14px; background: var(--glow); border: 0.5px solid rgba(0,200,117,0.2); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+    .cancha-name { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+    .cancha-addr { font-size: 12px; color: var(--soft); margin-bottom: 5px; }
+    .cancha-vbadge { display: inline-block; background: rgba(0,200,117,0.1); border: 0.5px solid rgba(0,200,117,0.3); border-radius: 6px; padding: 2px 7px; font-size: 10px; color: var(--accent); font-weight: 700; }
+
+    /* ── PUSH NOTIFY ── */
+    .notif-demo { max-width: 360px; margin: 40px auto 0; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
+    .notif-header { background: rgba(0,200,117,0.08); padding: 10px 14px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); }
+    .notif-app { font-size: 12px; font-weight: 700; color: var(--accent); }
+    .notif-time { margin-left: auto; font-size: 11px; color: var(--muted); }
+    .notif-row { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+    .notif-row:last-child { border-bottom: none; }
+    .notif-emoji { font-size: 20px; flex-shrink: 0; }
+    .notif-content {}
+    .notif-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .notif-body { font-size: 12px; color: var(--soft); line-height: 1.4; }
+
+    /* ── TESTIMONIALS ── */
+    .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 48px; }
     .testi { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 24px; }
-    .testi-stars { color: var(--accent); font-size: 16px; margin-bottom: 12px; }
-    .testi-text { font-size: 15px; color: var(--text-soft); line-height: 1.7; margin-bottom: 16px; font-style: italic; }
+    .testi-stars { color: var(--gold); font-size: 15px; margin-bottom: 12px; }
+    .testi-text { font-size: 14px; color: var(--soft); line-height: 1.7; margin-bottom: 16px; font-style: italic; }
     .testi-author { display: flex; align-items: center; gap: 10px; }
-    .testi-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--accent-glow); border: 1.5px solid rgba(0,200,117,0.3); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: var(--accent); }
+    .testi-av { width: 36px; height: 36px; border-radius: 50%; background: var(--glow); border: 1.5px solid rgba(0,200,117,0.3); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--accent); flex-shrink: 0; }
     .testi-name { font-size: 14px; font-weight: 700; color: var(--text); }
-    .testi-level { font-size: 12px; color: var(--text-muted); }
+    .testi-level { font-size: 12px; color: var(--muted); }
 
-    /* CTA FINAL */
-    .cta-section { padding: 80px 24px; text-align: center; position: relative; overflow: hidden; }
-    .cta-box { max-width: 600px; margin: 0 auto; background: var(--card); border: 1.5px solid rgba(0,200,117,0.25); border-radius: 28px; padding: 56px 40px; position: relative; overflow: hidden; }
-    .cta-glow { position: absolute; top: -50%; left: 50%; transform: translateX(-50%); width: 400px; height: 300px; background: radial-gradient(ellipse, rgba(0,200,117,0.1) 0%, transparent 70%); pointer-events: none; }
-    .cta-box h2 { font-size: clamp(26px, 4vw, 40px); font-weight: 900; letter-spacing: -0.02em; color: var(--text); margin-bottom: 14px; }
-    .cta-box p { font-size: 16px; color: var(--text-soft); margin-bottom: 32px; line-height: 1.7; }
-    .app-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 12px; padding: 10px 16px; font-size: 13px; color: var(--text-soft); text-decoration: none; transition: all 0.2s; }
-    .app-badge:hover { border-color: rgba(0,200,117,0.3); color: var(--text); }
-    .app-badges { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+    /* ── FAQ ── */
+    .faq-list { margin-top: 48px; display: flex; flex-direction: column; gap: 12px; max-width: 720px; margin-left: auto; margin-right: auto; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+    .faq-q { padding: 18px 20px; font-size: 16px; font-weight: 700; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .faq-q:hover { color: var(--accent); }
+    .faq-chevron { color: var(--accent); font-size: 18px; transition: transform .3s; flex-shrink: 0; }
+    .faq-a { padding: 0 20px 18px; font-size: 14px; color: var(--soft); line-height: 1.7; display: none; }
+    .faq-item.open .faq-a { display: block; }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
 
-    /* FOOTER */
-    footer { padding: 40px 24px; border-top: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
-    .footer-logo { font-size: 18px; font-weight: 900; color: var(--text); letter-spacing: -0.02em; }
+    /* ── CTA FINAL ── */
+    .cta-wrap { padding: 80px 24px; text-align: center; }
+    .cta-box { max-width: 640px; margin: 0 auto; background: var(--card); border: 1.5px solid rgba(0,200,117,0.25); border-radius: 32px; padding: 60px 40px; position: relative; overflow: hidden; }
+    .cta-glow { position: absolute; top: -30%; left: 50%; transform: translateX(-50%); width: 500px; height: 300px; background: radial-gradient(ellipse, rgba(0,200,117,0.1) 0%, transparent 70%); pointer-events: none; }
+    .cta-box h2 { font-size: clamp(26px,4vw,42px); font-weight: 900; letter-spacing: -0.025em; margin-bottom: 14px; }
+    .cta-box p { font-size: 17px; color: var(--soft); margin-bottom: 36px; line-height: 1.7; }
+    .cta-pills { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
+    .cta-pill { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 20px; padding: 8px 16px; font-size: 13px; color: var(--soft); }
+
+    /* ── FOOTER ── */
+    footer { padding: 48px 24px 32px; border-top: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; }
+    .footer-logo { font-size: 22px; font-weight: 900; color: var(--text); letter-spacing: -0.03em; }
     .footer-logo span { color: var(--accent); }
     .footer-links { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
-    .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; transition: color 0.2s; }
-    .footer-links a:hover { color: var(--accent); }
-    .footer-copy { font-size: 13px; color: var(--text-muted); }
-
-    /* DIVIDER */
-    .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 0 24px; }
-
-    /* SCROLL ANIMATIONS */
-    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-
-    /* RESPONSIVE */
-    @media (max-width: 640px) {
-      .nav-links { display: none; }
-      .steps::after { display: none; }
-      .step:not(:last-child)::after { display: none; }
-      .hero-stats { gap: 24px; }
-      .cta-box { padding: 36px 24px; }
-    }
+    .footer-links a { color: var(--soft); text-decoration: none; font-size: 14px; transition: color .2s; }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { font-size: 13px; color: var(--muted); }
   </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">Rank<span>eta</span></a>
+  <a href="/" class="logo">Rank<span>eta</span></a>
   <div class="nav-links">
     <a href="#features">Features</a>
-    <a href="#como-funciona">Cómo funciona</a>
-    <a href="#torneos">Torneos</a>
-    <a href="https://app.ranketa.lat" class="nav-cta">Entrar a la app →</a>
+    <a href="#screenshots">App</a>
+    <a href="#canchas">Canchas</a>
+    <a href="#premium">Premium</a>
+    <a href="#faq">FAQ</a>
+    <a href="https://app.ranketa.lat" class="nav-cta">Abrir app</a>
   </div>
 </nav>
 
 <!-- HERO -->
 <div class="hero">
   <div class="hero-glow"></div>
-  <div class="hero-glow-2"></div>
-  <div class="hero-badge">🎾 Exclusivo para Santiago del Estero</div>
-  <h1>Organizá partidos.<br/>Subí tu <span>ranking.</span></h1>
-  <p class="hero-sub">La primera app de pádel de Santiago del Estero. Encontrá jugadores de tu nivel, coordiná partidos y seguí tus estadísticas en tiempo real.</p>
-  <div class="hero-btns">
-    <a href="https://app.ranketa.lat" class="btn-primary">⚡ Empezar gratis</a>
-    <a href="#features" class="btn-secondary">Ver cómo funciona</a>
+  <div class="tag reveal">🎾 Santiago del Estero · Argentina</div>
+  <h1 class="h1 reveal" style="margin-bottom:20px">El pádel de SdE<br><span>en tu bolsillo</span></h1>
+  <p class="sub reveal" style="margin:0 auto">Encontrá rivales, organizá partidos, seguí tu ranking y competí en torneos. Todo en una app. Gratis.</p>
+  <div class="hero-btns reveal">
+    <a href="https://app.ranketa.lat" class="btn btn-green">⚡ Abrir Ranketa gratis</a>
+    <a href="#screenshots" class="btn btn-ghost">Ver cómo funciona</a>
   </div>
-  <div class="hero-stats">
-    <div class="hero-stat">
-      <div class="hero-stat-val">100%</div>
-      <div class="hero-stat-label">Gratis</div>
+  <div class="hero-stats reveal">
+    <div style="text-align:center"><div class="hs-val">+48</div><div class="hs-label">Partidos jugados</div></div>
+    <div style="text-align:center"><div class="hs-val">+12</div><div class="hs-label">Jugadores activos</div></div>
+    <div style="text-align:center"><div class="hs-val">6</div><div class="hs-label">Canchas registradas</div></div>
+    <div style="text-align:center"><div class="hs-val">100%</div><div class="hs-label">Gratis siempre</div></div>
+  </div>
+</div>
+
+<!-- SCREENSHOTS -->
+<div class="section" id="screenshots">
+  <div class="tag reveal">📱 La app</div>
+  <h2 class="h2 reveal">Diseñada para el jugador real</h2>
+  <p class="sub reveal" style="margin-top:12px">Sin complicaciones. Abrís la app y en segundos encontrás un partido, te anotás y listo.</p>
+
+  <div class="phone-wrap" style="margin-top:52px">
+
+    <!-- Phone 1: Partidos -->
+    <div class="screenshot-item reveal">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="pscreen">
+          <div class="ps-header">
+            <div class="ps-title">Partidos</div>
+            <div class="ps-plus">+</div>
+          </div>
+          <div class="ps-stats">
+            <div class="ps-stat"><div class="ps-stat-n">9</div><div class="ps-stat-l">Disponibles</div></div>
+            <div class="ps-stat"><div class="ps-stat-n">3</div><div class="ps-stat-l">Mis partidos</div></div>
+            <div class="ps-stat"><div class="ps-stat-n">2</div><div class="ps-stat-l">Completos</div></div>
+          </div>
+          <!-- Próximos -->
+          <div style="font-size:9px;font-weight:700;color:#3A6B4A;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Tus próximos partidos</div>
+          <div style="display:flex;gap:8px;margin-bottom:10px;overflow:hidden">
+            <div style="background:#0A1A0F;border:1px solid rgba(0,200,117,0.35);border-radius:12px;padding:8px;min-width:120px;position:relative">
+              <div style="position:absolute;top:0;left:0;right:0;height:2px;background:#00C875;border-radius:2px 2px 0 0"></div>
+              <div style="font-size:9px;color:#00C875;font-weight:700;margin-bottom:4px">Hoy · 20:00hs</div>
+              <div style="font-size:10px;color:#F0FFF5;font-weight:700">Club Norte</div>
+              <div style="font-size:8px;color:#3A6B4A">Intermedio · 4/4</div>
+            </div>
+          </div>
+          <!-- Lista -->
+          <div style="font-size:9px;font-weight:700;color:#3A6B4A;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Disponibles</div>
+          <div class="ps-game">
+            <div class="ps-game-date"><div class="ps-game-day">28</div><div class="ps-game-mon">Jul</div></div>
+            <div class="ps-div"></div>
+            <div class="ps-body">
+              <div class="ps-venue">Club Pádel Santiago</div>
+              <div class="ps-meta">18:00hs · Carlos M.</div>
+              <div class="ps-pill">Avanzado</div>
+            </div>
+            <div class="ps-spots"><div class="ps-spots-n">2</div><div class="ps-spots-l">libres</div></div>
+          </div>
+          <div class="ps-game">
+            <div class="ps-game-date"><div class="ps-game-day">29</div><div class="ps-game-mon">Jul</div></div>
+            <div class="ps-div"></div>
+            <div class="ps-body">
+              <div class="ps-venue">Courts & Sport</div>
+              <div class="ps-meta">09:00hs · Laura P.</div>
+              <div class="ps-pill" style="border-color:rgba(245,158,11,0.3);color:#F59E0B;background:rgba(245,158,11,0.1)">Intermedio</div>
+            </div>
+            <div class="ps-spots"><div class="ps-full">Lleno</div></div>
+          </div>
+          <div class="pnav">
+            <div class="pnav-item"><div class="pnav-icon a">⊞</div><div class="pnav-label a">Partidos</div><div class="pnav-dot"></div></div>
+            <div class="pnav-item"><div class="pnav-icon">🏆</div><div class="pnav-label">Ranking</div></div>
+            <div class="pnav-item"><div class="pnav-icon">📍</div><div class="pnav-label">Canchas</div></div>
+            <div class="pnav-item"><div class="pnav-icon">👤</div><div class="pnav-label">Perfil</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="screenshot-label">Partidos</div>
+      <div class="screenshot-badge">Encontrá y anotate</div>
     </div>
-    <div class="hero-stat">
-      <div class="hero-stat-val">📍</div>
-      <div class="hero-stat-label">Santiago del Estero</div>
+
+    <!-- Phone 2: Ranking -->
+    <div class="screenshot-item reveal" style="margin-top:-20px">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="pscreen">
+          <div class="ps-header">
+            <div class="ps-title">Ranking</div>
+            <div style="background:#0A1A0F;border:0.5px solid #1a3020;border-radius:8px;padding:4px 8px;font-size:9px;color:#00C875;font-weight:700">🏆 Puntos</div>
+          </div>
+          <!-- Podio -->
+          <div class="pr-podium">
+            <div class="pr-slot">
+              <div style="font-size:14px;margin-bottom:3px">🥈</div>
+              <div class="pr-av pr-av-2">MR</div>
+              <div class="pr-name">Martín</div>
+              <div class="pr-pts" style="color:#9CA3AF">280 pts</div>
+              <div class="pr-bar pr-bar-2"><span class="pr-num">2</span></div>
+            </div>
+            <div class="pr-slot">
+              <div style="font-size:16px;margin-bottom:3px">🥇</div>
+              <div class="pr-av pr-av-1">CM</div>
+              <div class="pr-name" style="color:#00C875">Carlos</div>
+              <div class="pr-pts" style="color:#F59E0B">340 pts</div>
+              <div class="pr-bar pr-bar-1"><span class="pr-num">1</span></div>
+            </div>
+            <div class="pr-slot">
+              <div style="font-size:13px;margin-bottom:3px">🥉</div>
+              <div class="pr-av pr-av-3">LP</div>
+              <div class="pr-name">Laura</div>
+              <div class="pr-pts" style="color:#B45309">210 pts</div>
+              <div class="pr-bar pr-bar-3"><span class="pr-num">3</span></div>
+            </div>
+          </div>
+          <!-- Lista -->
+          <div style="margin-top:8px">
+            <div class="pr-row" style="background:rgba(0,200,117,0.04);border-left:2px solid #00C875">
+              <div style="width:16px;font-size:9px;font-weight:800;color:#00C875">1</div>
+              <div class="pr-row-av" style="background:#00C87520;color:#00C875;border:1.5px solid #00C87540">CM</div>
+              <div class="pr-row-body"><div class="pr-row-name">Carlos M.</div><div class="pr-row-meta">Intermedio · 12V</div></div>
+              <div class="pr-row-pts">340</div>
+            </div>
+            <div class="pr-row">
+              <div style="width:16px;font-size:9px;font-weight:800;color:#3A6B4A">2</div>
+              <div class="pr-row-av" style="background:#9CA3AF20;color:#9CA3AF;border:1.5px solid #9CA3AF40">MR</div>
+              <div class="pr-row-body"><div class="pr-row-name">Martín R.</div><div class="pr-row-meta">Avanzado · 8V</div></div>
+              <div class="pr-row-pts" style="color:#9CA3AF">280</div>
+            </div>
+            <div class="pr-row">
+              <div style="width:16px;font-size:9px;font-weight:800;color:#3A6B4A">3</div>
+              <div class="pr-row-av" style="background:#B4530920;color:#B45309;border:1.5px solid #B4530940">LP</div>
+              <div class="pr-row-body"><div class="pr-row-name">Laura P.</div><div class="pr-row-meta">Intermedio · 6V</div></div>
+              <div class="pr-row-pts" style="color:#B45309">210</div>
+            </div>
+          </div>
+          <div class="pnav">
+            <div class="pnav-item"><div class="pnav-icon">⊞</div><div class="pnav-label">Partidos</div></div>
+            <div class="pnav-item"><div class="pnav-icon a">🏆</div><div class="pnav-label a">Ranking</div><div class="pnav-dot"></div></div>
+            <div class="pnav-item"><div class="pnav-icon">📍</div><div class="pnav-label">Canchas</div></div>
+            <div class="pnav-item"><div class="pnav-icon">👤</div><div class="pnav-label">Perfil</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="screenshot-label">Ranking</div>
+      <div class="screenshot-badge">Tu posición en tiempo real</div>
     </div>
-    <div class="hero-stat">
-      <div class="hero-stat-val">🔴</div>
-      <div class="hero-stat-label">En vivo</div>
+
+    <!-- Phone 3: Perfil -->
+    <div class="screenshot-item reveal">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="pscreen">
+          <div class="ps-header">
+            <div class="ps-title">Mi Perfil</div>
+            <div style="background:#0A1A0F;border:0.5px solid #1a3020;border-radius:8px;padding:4px 10px;font-size:9px;color:#3A6B4A;font-weight:700">✏️ Editar</div>
+          </div>
+          <!-- Avatar centrado -->
+          <div style="text-align:center;padding:12px 0 8px">
+            <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#00C875,#009A5A);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#050E09;margin:0 auto 8px;border:3px solid #00C875;box-shadow:0 0 0 3px rgba(0,200,117,0.15)">CM</div>
+            <div style="font-size:14px;font-weight:900;color:#F0FFF5;margin-bottom:4px">Carlos M.</div>
+            <div style="display:flex;justify-content:center;gap:4px;flex-wrap:wrap;margin-bottom:6px">
+              <span style="background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);border-radius:6px;padding:2px 6px;font-size:8px;color:#F59E0B;font-weight:700">⭐ Admin</span>
+              <span style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:6px;padding:2px 6px;font-size:8px;color:#F59E0B;font-weight:700">🟡 Intermedio</span>
+              <span style="background:rgba(255,122,53,0.1);border:1px solid rgba(255,122,53,0.25);border-radius:6px;padding:2px 6px;font-size:8px;color:#FF7A35;font-weight:700">🔥 Racha 4</span>
+            </div>
+            <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(0,200,117,0.1);border:0.5px solid rgba(0,200,117,0.3);border-radius:20px;padding:4px 10px">
+              <span style="font-size:9px;color:#00C875;font-weight:700">#1 en el ranking · 340 pts</span>
+            </div>
+          </div>
+          <!-- Stats -->
+          <div style="display:flex;border-top:0.5px solid #1a3020;border-bottom:0.5px solid #1a3020;margin:0 -10px">
+            <div style="flex:1;padding:8px 0;text-align:center;border-right:0.5px solid #1a3020"><div style="font-size:14px;font-weight:900;color:#00C875">12</div><div style="font-size:7px;color:#3A6B4A;font-weight:700;text-transform:uppercase;margin-top:2px">Victorias</div></div>
+            <div style="flex:1;padding:8px 0;text-align:center;border-right:0.5px solid #1a3020"><div style="font-size:14px;font-weight:900;color:#F0FFF5">18</div><div style="font-size:7px;color:#3A6B4A;font-weight:700;text-transform:uppercase;margin-top:2px">Partidos</div></div>
+            <div style="flex:1;padding:8px 0;text-align:center;border-right:0.5px solid #1a3020"><div style="font-size:14px;font-weight:900;color:#FF7A35">🔥4</div><div style="font-size:7px;color:#3A6B4A;font-weight:700;text-transform:uppercase;margin-top:2px">Racha</div></div>
+            <div style="flex:1;padding:8px 0;text-align:center"><div style="font-size:14px;font-weight:900;color:#F0FFF5">67%</div><div style="font-size:7px;color:#3A6B4A;font-weight:700;text-transform:uppercase;margin-top:2px">Efect.</div></div>
+          </div>
+          <!-- Tabs -->
+          <div style="display:flex;border-bottom:0.5px solid #1a3020;margin:0 -10px 8px">
+            <div style="flex:1;padding:8px 0;text-align:center;font-size:9px;font-weight:700;color:#00C875;border-bottom:2px solid #00C875">Historial</div>
+            <div style="flex:1;padding:8px 0;text-align:center;font-size:9px;font-weight:700;color:#3A6B4A">Logros</div>
+            <div style="flex:1;padding:8px 0;text-align:center;font-size:9px;font-weight:700;color:#3A6B4A">Stats</div>
+          </div>
+          <!-- Historial -->
+          <div style="display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:0.5px solid #0F2014">
+            <div style="width:28px;height:28px;border-radius:8px;background:rgba(0,200,117,0.12);border:0.5px solid rgba(0,200,117,0.3);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#00C875;flex-shrink:0">V</div>
+            <div style="flex:1"><div style="font-size:10px;font-weight:700;color:#F0FFF5">Club Norte Pádel</div><div style="font-size:8px;color:#3A6B4A">Hoy · Intermedio</div></div>
+            <div style="font-size:10px;font-weight:700;color:#00C875">2-0</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;padding:6px 0">
+            <div style="width:28px;height:28px;border-radius:8px;background:rgba(239,68,68,0.1);border:0.5px solid rgba(239,68,68,0.25);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#EF4444;flex-shrink:0">D</div>
+            <div style="flex:1"><div style="font-size:10px;font-weight:700;color:#F0FFF5">Club Santiago</div><div style="font-size:8px;color:#3A6B4A">Ayer · Avanzado</div></div>
+            <div style="font-size:10px;font-weight:700;color:#EF4444">0-2</div>
+          </div>
+          <div class="pnav">
+            <div class="pnav-item"><div class="pnav-icon">⊞</div><div class="pnav-label">Partidos</div></div>
+            <div class="pnav-item"><div class="pnav-icon">🏆</div><div class="pnav-label">Ranking</div></div>
+            <div class="pnav-item"><div class="pnav-icon">📍</div><div class="pnav-label">Canchas</div></div>
+            <div class="pnav-item"><div class="pnav-icon a">👤</div><div class="pnav-label a">Perfil</div><div class="pnav-dot"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="screenshot-label">Perfil</div>
+      <div class="screenshot-badge">Tu historial y ranking</div>
     </div>
   </div>
 </div>
@@ -184,175 +461,326 @@
 <div class="divider"></div>
 
 <!-- FEATURES -->
-<section id="features">
-  <div class="reveal">
-    <div class="section-badge">✨ Features</div>
-    <div class="section-title">Todo lo que necesitás<br/>para jugar más pádel</div>
-    <p class="section-sub">Diseñada específicamente para la comunidad padelista de Santiago del Estero.</p>
-  </div>
-  <div class="features-grid">
-    <div class="feat-card reveal">
+<div class="section" id="features">
+  <div class="tag reveal">✨ Features</div>
+  <h2 class="h2 reveal">Todo lo que necesitás para jugar</h2>
+  <p class="sub reveal" style="margin-top:12px">Ranketa tiene todo lo que falta en los grupos de WhatsApp.</p>
+  <div class="feat-grid">
+    <div class="feat reveal">
       <div class="feat-icon">🎾</div>
-      <div class="feat-title">Partidos en tiempo real</div>
-      <div class="feat-desc">Creá o uníte a partidos en segundos. Ves quién se une, quién sale y cuántos lugares quedan — todo en vivo.</div>
+      <div class="feat-title">Encontrá partidos cerca tuyo</div>
+      <div class="feat-desc">Filtrá por nivel, fecha y cancha. Anotate en un toque. Sin coordinar por grupos de WhatsApp.</div>
+      <span class="feat-badge">Filtros por nivel y cancha</span>
     </div>
-    <div class="feat-card reveal">
+    <div class="feat reveal">
       <div class="feat-icon">🏆</div>
-      <div class="feat-title">Ranking global</div>
-      <div class="feat-desc">Cada victoria suma puntos. Seguí tu posición en el ranking, tu racha actual y tus estadísticas históricas.</div>
+      <div class="feat-title">Ranking en tiempo real</div>
+      <div class="feat-desc">Cada partido suma puntos. Subís posiciones según tu nivel de juego. Podio actualizado cada semana.</div>
+      <span class="feat-badge">Racha y efectividad</span>
     </div>
-    <div class="feat-card reveal">
-      <div class="feat-icon">💬</div>
-      <div class="feat-title">Chat del partido</div>
-      <div class="feat-desc">Coordiná con los jugadores de tu partido por chat en tiempo real. Notificaciones push aunque la app esté cerrada.</div>
+    <div class="feat reveal">
+      <div class="feat-icon">📋</div>
+      <div class="feat-title">Cargá resultados fácil</div>
+      <div class="feat-desc">El ganador carga el resultado y el rival lo confirma o disputa. Los puntos se aplican solos.</div>
+      <span class="feat-badge">Confirmación automática</span>
     </div>
-    <div class="feat-card reveal">
+    <div class="feat reveal">
       <div class="feat-icon">⏳</div>
-      <div class="feat-title">Lista de espera</div>
-      <div class="feat-desc">¿El partido está lleno? Anotate en lista de espera y entrás automáticamente si alguien cancela.</div>
+      <div class="feat-title">Lista de espera inteligente</div>
+      <div class="feat-desc">Si un partido está lleno, anotate en la lista. Si alguien se va, te llega la notificación automáticamente.</div>
+      <span class="feat-badge">Notificación push instantánea</span>
     </div>
-    <div class="feat-card reveal">
-      <div class="feat-icon">🔔</div>
-      <div class="feat-title">Recordatorios automáticos</div>
-      <div class="feat-desc">Recibís una notificación 2 horas antes de tu partido para que no se te olvide. Menos no-shows, más pádel.</div>
-    </div>
-    <div class="feat-card reveal">
-      <div class="feat-icon">⚔️</div>
-      <div class="feat-title">Head-to-head</div>
-      <div class="feat-desc">Mirá el historial de enfrentamientos con cualquier jugador. ¿Cuántas veces ganaste contra él? La app lo sabe.</div>
-    </div>
-    <div class="feat-card reveal">
-      <div class="feat-icon">🏅</div>
-      <div class="feat-title">Torneos</div>
-      <div class="feat-desc">Enterate de los próximos torneos en Santiago del Estero. Inscripciones, premios y resultados en un solo lugar.</div>
-    </div>
-    <div class="feat-card reveal">
-      <div class="feat-icon">✅</div>
-      <div class="feat-title">Resultados verificados</div>
-      <div class="feat-desc">Anti-trampa integrado: el equipo perdedor debe confirmar el resultado antes de que se sumen puntos al ranking.</div>
-    </div>
-    <div class="feat-card reveal">
+    <div class="feat reveal">
       <div class="feat-icon">⭐</div>
       <div class="feat-title">Canchas verificadas</div>
-      <div class="feat-desc">Canchas oficiales con info completa: dirección, teléfono, Instagram y fotos. Badge dorado para las verificadas.</div>
+      <div class="feat-desc">Las mejores canchas de Santiago del Estero con fotos, dirección, reseñas y partidos disponibles.</div>
+      <span class="feat-badge">Con rating de jugadores</span>
+    </div>
+    <div class="feat reveal">
+      <div class="feat-icon">🤝</div>
+      <div class="feat-title">Amigos y chat</div>
+      <div class="feat-desc">Agregá jugadores a tu lista de amigos, mandales mensajes y filtrá los partidos donde van a estar.</div>
+      <span class="feat-badge">Filtro "solo amigos"</span>
+    </div>
+    <div class="feat reveal">
+      <div class="feat-icon">🏟️</div>
+      <div class="feat-title">Torneos</div>
+      <div class="feat-desc">Los mejores torneos de pádel de Santiago del Estero, todos en un lugar. Inscripciones, fechas y resultados.</div>
+      <span class="feat-badge">Bracket automático</span>
+    </div>
+    <div class="feat reveal">
+      <div class="feat-icon">🔔</div>
+      <div class="feat-title">Notificaciones push</div>
+      <div class="feat-desc">Te avisamos cuando alguien se une a tu partido, cuando hay que cargar el resultado o si hay un torneo nuevo.</div>
+      <span class="feat-badge">Aunque la app esté cerrada</span>
+    </div>
+    <div class="feat reveal">
+      <div class="feat-icon">📱</div>
+      <div class="feat-title">Instalable como app</div>
+      <div class="feat-desc">Agregala a tu pantalla de inicio y funciona como una app nativa en iPhone y Android. Sin App Store.</div>
+      <span class="feat-badge">PWA · Sin descargar nada</span>
     </div>
   </div>
-</section>
+</div>
 
 <div class="divider"></div>
 
-<!-- CÓMO FUNCIONA -->
-<section id="como-funciona">
-  <div class="reveal">
-    <div class="section-badge">🚀 Simple</div>
-    <div class="section-title">Tres pasos para jugar</div>
-    <p class="section-sub">Sin complicaciones. En menos de un minuto ya podés estar en un partido.</p>
-  </div>
+<!-- HOW IT WORKS -->
+<div class="section">
+  <div class="tag reveal">🚀 Cómo funciona</div>
+  <h2 class="h2 reveal">En 3 pasos ya estás jugando</h2>
   <div class="steps">
     <div class="step reveal">
       <div class="step-num">1</div>
-      <div class="step-title">Creá tu perfil</div>
-      <div class="step-desc">Registrate gratis, elegí tu nivel (principiante, intermedio o avanzado) y subí tu foto.</div>
+      <div class="step-title">Creá tu cuenta</div>
+      <div class="step-desc">Registrate con tu email, elegí tu nivel y completá tu perfil. 2 minutos y listo.</div>
     </div>
     <div class="step reveal">
       <div class="step-num">2</div>
-      <div class="step-title">Buscá un partido</div>
-      <div class="step-desc">Filtrá por fecha, nivel o cancha. Ves quiénes están anotados y te unís con un tap.</div>
+      <div class="step-title">Encontrá un partido</div>
+      <div class="step-desc">Filtrá por nivel, fecha o cancha. Anotate con un toque y te llega la confirmación.</div>
     </div>
     <div class="step reveal">
       <div class="step-num">3</div>
-      <div class="step-title">Jugá y subí en el ranking</div>
-      <div class="step-desc">Cargá el resultado después del partido. Los puntos se suman automáticamente al ranking global.</div>
+      <div class="step-title">Jugá y subí el ranking</div>
+      <div class="step-desc">Cargá el resultado después del partido y los puntos se aplican solos. Tu posición sube en tiempo real.</div>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">4</div>
+      <div class="step-title">Competí en torneos</div>
+      <div class="step-desc">Inscribite en torneos, seguí el bracket y competí contra los mejores de Santiago del Estero.</div>
     </div>
   </div>
-</section>
+</div>
 
 <div class="divider"></div>
 
-<!-- TORNEOS -->
-<section id="torneos">
-  <div class="reveal">
-    <div class="section-badge">🏆 Torneos</div>
-    <div class="section-title">Competí a otro nivel</div>
-    <p class="section-sub">Los mejores torneos de pádel de Santiago del Estero, todos en un lugar. Inscripciones, fechas y resultados actualizados.</p>
+<!-- NOTIFICACIONES PUSH -->
+<div class="section">
+  <div class="tag reveal">🔔 Notificaciones</div>
+  <h2 class="h2 reveal">No te perdés nada</h2>
+  <p class="sub reveal" style="margin-top:12px">Ranketa te avisa en tiempo real para que nunca llegues tarde ni te quedes afuera.</p>
+  <div class="notif-demo reveal" style="margin-top:48px">
+    <div class="notif-header">
+      <span style="font-size:16px">🎾</span>
+      <span class="notif-app">Ranketa</span>
+      <span class="notif-time">ahora</span>
+    </div>
+    <div class="notif-row">
+      <div class="notif-emoji">👥</div>
+      <div class="notif-content">
+        <div class="notif-title">Martín se unió a tu partido</div>
+        <div class="notif-body">Club Norte Pádel · Hoy 20:00hs · Quedan 2 lugares</div>
+      </div>
+    </div>
+    <div class="notif-row">
+      <div class="notif-emoji">⚡</div>
+      <div class="notif-content">
+        <div class="notif-title">¡Lugar disponible!</div>
+        <div class="notif-body">Alguien se fue del partido de las 18:00hs. Anotate antes que otro.</div>
+      </div>
+    </div>
+    <div class="notif-row">
+      <div class="notif-emoji">📋</div>
+      <div class="notif-content">
+        <div class="notif-title">Cargá el resultado</div>
+        <div class="notif-body">Tu partido de ayer en Courts & Sport no tiene resultado. Cargalo para sumar puntos.</div>
+      </div>
+    </div>
+    <div class="notif-row">
+      <div class="notif-emoji">🏆</div>
+      <div class="notif-content">
+        <div class="notif-title">¡Subiste al #3!</div>
+        <div class="notif-body">Tu racha de 4 victorias te subió en el ranking. Seguís sumando.</div>
+      </div>
+    </div>
   </div>
-  <div class="features-grid" style="margin-top:48px;">
-    <div class="feat-card reveal" style="border-color: rgba(0,200,117,0.3);">
-      <div class="feat-icon">📅</div>
-      <div class="feat-title">Próximos torneos</div>
-      <div class="feat-desc">Enterate con anticipación de los próximos eventos. Fechas, canchas y categorías disponibles.</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- CANCHAS -->
+<div class="section" id="canchas">
+  <div class="tag reveal">📍 Canchas</div>
+  <h2 class="h2 reveal">Las mejores canchas de Santiago</h2>
+  <p class="sub reveal" style="margin-top:12px">Todas con reseñas, fotos, dirección y los próximos partidos disponibles.</p>
+  <div class="canchas-grid">
+    <div class="cancha-card reveal">
+      <div class="cancha-icon">🎾</div>
+      <div>
+        <div class="cancha-name">Club Norte Pádel</div>
+        <div class="cancha-addr">📍 Av. Belgrano 1240, SdE</div>
+        <span class="cancha-vbadge">⭐ Verificada</span>
+      </div>
     </div>
-    <div class="feat-card reveal">
-      <div class="feat-icon">🎖️</div>
-      <div class="feat-title">Premios y categorías</div>
-      <div class="feat-desc">Torneos para todos los niveles: principiante, intermedio, avanzado, mixto y libre. Premios para los ganadores.</div>
+    <div class="cancha-card reveal">
+      <div class="cancha-icon">🎾</div>
+      <div>
+        <div class="cancha-name">Club Santiago Pádel</div>
+        <div class="cancha-addr">📍 Av. Roca 580, SdE</div>
+        <span class="cancha-vbadge">⭐ Verificada</span>
+      </div>
     </div>
-    <div class="feat-card reveal">
-      <div class="feat-icon">📊</div>
-      <div class="feat-title">Seguí los resultados</div>
-      <div class="feat-desc">Estado en tiempo real: próximamente, en curso o finalizado. Todo desde la app sin salir a buscar info.</div>
+    <div class="cancha-card reveal">
+      <div class="cancha-icon">🎾</div>
+      <div>
+        <div class="cancha-name">Courts & Sport</div>
+        <div class="cancha-addr">📍 Pellegrini 890, SdE</div>
+        <span class="cancha-vbadge">⭐ Verificada</span>
+      </div>
+    </div>
+    <div class="cancha-card reveal">
+      <div class="cancha-icon">🎾</div>
+      <div>
+        <div class="cancha-name">Pádel El Indio</div>
+        <div class="cancha-addr">📍 Independencia 450, SdE</div>
+        <span style="font-size:11px;color:var(--soft)">+ Reseñas de jugadores</span>
+      </div>
+    </div>
+    <div class="cancha-card reveal">
+      <div class="cancha-icon">🎾</div>
+      <div>
+        <div class="cancha-name">Centro Pádel SdE</div>
+        <div class="cancha-addr">📍 Alsina 780, SdE</div>
+        <span style="font-size:11px;color:var(--soft)">+ Horarios disponibles</span>
+      </div>
+    </div>
+    <div class="cancha-card reveal" style="border-style:dashed;justify-content:center;text-align:center;flex-direction:column">
+      <div style="font-size:28px;margin-bottom:8px">➕</div>
+      <div style="font-size:14px;font-weight:700;color:var(--soft)">¿Tenés una cancha?</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px">Reclamá tu perfil gratis en la app</div>
     </div>
   </div>
-</section>
+</div>
+
+<div class="divider"></div>
+
+<!-- PREMIUM -->
+<div class="section" id="premium">
+  <div class="tag reveal" style="background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.25);color:var(--gold)">💎 Premium</div>
+  <h2 class="h2 reveal">Gratis siempre, más si querés más</h2>
+  <p class="sub reveal" style="margin-top:12px">Ranketa es gratis para siempre. El plan Premium desbloquea features extra para los más competitivos.</p>
+  <div class="premium-grid">
+    <div class="plan plan-free reveal">
+      <div class="plan-name">Free</div>
+      <div class="plan-price">$0</div>
+      <div class="plan-period">para siempre</div>
+      <ul class="plan-features">
+        <li class="plan-feat"><span class="plan-feat-check">✓</span>Partidos ilimitados para ver</li>
+        <li class="plan-feat"><span class="plan-feat-check">✓</span>Anotarte a hasta 3 partidos por día</li>
+        <li class="plan-feat"><span class="plan-feat-check">✓</span>Ranking en tiempo real</li>
+        <li class="plan-feat"><span class="plan-feat-check">✓</span>Últimos 10 partidos en historial</li>
+        <li class="plan-feat"><span class="plan-feat-check">✓</span>Chat con amigos</li>
+        <li class="plan-feat"><span class="plan-feat-check">✓</span>Torneos</li>
+        <li class="plan-feat"><span class="plan-feat-x plan-feat-check">✗</span><span style="opacity:.5">Lista de espera prioritaria</span></li>
+        <li class="plan-feat"><span class="plan-feat-x plan-feat-check">✗</span><span style="opacity:.5">Ver quién visitó tu perfil</span></li>
+        <li class="plan-feat"><span class="plan-feat-x plan-feat-check">✗</span><span style="opacity:.5">Marco y badge de avatar</span></li>
+      </ul>
+      <a href="https://app.ranketa.lat" class="plan-btn plan-btn-free">Empezar gratis</a>
+    </div>
+    <div class="plan plan-premium reveal">
+      <div class="plan-badge">💎 PREMIUM</div>
+      <div class="plan-name">Premium</div>
+      <div class="plan-price plan-price-gold">$4.999</div>
+      <div class="plan-period">por mes · o $48.000/año</div>
+      <ul class="plan-features">
+        <li class="plan-feat"><span class="plan-feat-check plan-feat-check-gold">✓</span>Todo lo del plan Free</li>
+        <li class="plan-feat"><span class="plan-feat-check plan-feat-check-gold">✓</span>Hasta 5 partidos por día</li>
+        <li class="plan-feat"><span class="plan-feat-check plan-feat-check-gold">✓</span>Historial completo ilimitado</li>
+        <li class="plan-feat"><span class="plan-feat-check plan-feat-check-gold">✓</span>Prioridad en lista de espera</li>
+        <li class="plan-feat"><span class="plan-feat-check plan-feat-check-gold">✓</span>Ver quién visitó tu perfil (48hs)</li>
+        <li class="plan-feat"><span class="plan-feat-check plan-feat-check-gold">✓</span>Marco de avatar (9 colores)</li>
+        <li class="plan-feat"><span class="plan-feat-check plan-feat-check-gold">✓</span>Badge personalizado (20 chars)</li>
+        <li class="plan-feat"><span class="plan-feat-check plan-feat-check-gold">✓</span>Insignia 💎 en el ranking</li>
+      </ul>
+      <a href="https://wa.me/543855007321?text=Quiero%20activar%20Ranketa%20Premium" target="_blank" class="plan-btn plan-btn-gold">💎 Activar Premium</a>
+    </div>
+  </div>
+</div>
 
 <div class="divider"></div>
 
 <!-- TESTIMONIALS -->
-<section>
-  <div class="reveal">
-    <div class="section-badge">💬 Comunidad</div>
-    <div class="section-title">Lo que dicen los jugadores</div>
-  </div>
-  <div class="testimonials">
+<div class="section">
+  <div class="tag reveal">💬 Comunidad</div>
+  <h2 class="h2 reveal">Lo que dicen los jugadores</h2>
+  <div class="testi-grid">
     <div class="testi reveal">
       <div class="testi-stars">★★★★★</div>
       <p class="testi-text">"Antes coordinaba partidos por 3 grupos de WhatsApp distintos. Ahora todo está en un solo lugar y es mucho más fácil."</p>
       <div class="testi-author">
-        <div class="testi-avatar">JP</div>
-        <div>
-          <div class="testi-name">Juan Pablo</div>
-          <div class="testi-level">Nivel intermedio · SdE</div>
-        </div>
+        <div class="testi-av">JP</div>
+        <div><div class="testi-name">Juan Pablo</div><div class="testi-level">Nivel intermedio · SdE</div></div>
       </div>
     </div>
     <div class="testi reveal">
       <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">"Me encanta la lista de espera. Me quedé afuera de un partido y al rato me llegó una notificación diciendo que había un lugar disponible."</p>
+      <p class="testi-text">"Me encanta la lista de espera. Me quedé afuera de un partido y al rato me llegó la notificación diciendo que había un lugar."</p>
       <div class="testi-author">
-        <div class="testi-avatar">MG</div>
-        <div>
-          <div class="testi-name">María G.</div>
-          <div class="testi-level">Nivel principiante · SdE</div>
-        </div>
+        <div class="testi-av">MG</div>
+        <div><div class="testi-name">María G.</div><div class="testi-level">Nivel principiante · SdE</div></div>
       </div>
     </div>
     <div class="testi reveal">
       <div class="testi-stars">★★★★★</div>
       <p class="testi-text">"El ranking me motiva un montón a jugar más. Ver cómo subo de posición semana a semana es adictivo."</p>
       <div class="testi-author">
-        <div class="testi-avatar">CR</div>
-        <div>
-          <div class="testi-name">Carlos R.</div>
-          <div class="testi-level">Nivel avanzado · SdE</div>
-        </div>
+        <div class="testi-av">CR</div>
+        <div><div class="testi-name">Carlos R.</div><div class="testi-level">Nivel avanzado · SdE</div></div>
       </div>
     </div>
   </div>
-</section>
+</div>
+
+<div class="divider"></div>
+
+<!-- FAQ -->
+<div class="section" id="faq">
+  <div class="tag reveal">❓ FAQ</div>
+  <h2 class="h2 reveal" style="text-align:center">Preguntas frecuentes</h2>
+  <div class="faq-list">
+    <div class="faq-item reveal">
+      <div class="faq-q" onclick="toggleFaq(this)">¿Ranketa es gratis? <span class="faq-chevron">▾</span></div>
+      <div class="faq-a">Sí, completamente gratis para siempre. Podés crear tu cuenta, anotarte a partidos, ver el ranking y usar el chat sin pagar nada. El plan Premium desbloquea features extra pero no es obligatorio.</div>
+    </div>
+    <div class="faq-item reveal">
+      <div class="faq-q" onclick="toggleFaq(this)">¿Tengo que descargar algo? <span class="faq-chevron">▾</span></div>
+      <div class="faq-a">No. Ranketa funciona directo desde el navegador en <a href="https://app.ranketa.lat" style="color:var(--accent)">app.ranketa.lat</a>. Si querés, podés agregarla a tu pantalla de inicio para que funcione como una app nativa (iPhone: Safari → Compartir → Agregar a inicio · Android: Chrome → Menú → Agregar a pantalla de inicio).</div>
+    </div>
+    <div class="faq-item reveal">
+      <div class="faq-q" onclick="toggleFaq(this)">¿Cómo funciona el ranking? <span class="faq-chevron">▾</span></div>
+      <div class="faq-a">Cada partido jugado suma puntos. Los ganadores suman más (10 pts) y los perdedores suman menos (2 pts). Nadie pierde puntos. El ranking se actualiza en tiempo real después de que el resultado es confirmado por ambas partes.</div>
+    </div>
+    <div class="faq-item reveal">
+      <div class="faq-q" onclick="toggleFaq(this)">¿Cómo activo el Premium? <span class="faq-chevron">▾</span></div>
+      <div class="faq-a">Por ahora la activación es manual. Escribinos por WhatsApp al +54 385 500-7321, hacemos el pago y activamos tu cuenta en minutos. El precio es $4.999 ARS por mes o $48.000 ARS por año.</div>
+    </div>
+    <div class="faq-item reveal">
+      <div class="faq-q" onclick="toggleFaq(this)">¿Puedo crear un partido privado? <span class="faq-chevron">▾</span></div>
+      <div class="faq-a">Sí. Al crear el partido podés marcarlo como privado y solo las personas con el link o que vos invites van a verlo. Ideal para partidos entre amigos sin que aparezca en el listado público.</div>
+    </div>
+    <div class="faq-item reveal">
+      <div class="faq-q" onclick="toggleFaq(this)">¿Ranketa está disponible fuera de Santiago del Estero? <span class="faq-chevron">▾</span></div>
+      <div class="faq-a">Por ahora el foco es Santiago del Estero, pero técnicamente cualquiera puede usarla. Si querés sumarte desde otra ciudad, escribinos y lo vemos.</div>
+    </div>
+  </div>
+</div>
 
 <div class="divider"></div>
 
 <!-- CTA FINAL -->
-<div class="cta-section">
+<div class="cta-wrap">
   <div class="cta-box reveal">
     <div class="cta-glow"></div>
-    <div style="font-size:48px; margin-bottom:20px;">🎾</div>
-    <h2>¿Listo para jugar?</h2>
-    <p>Sumate a la comunidad de pádel de Santiago del Estero. Es gratis, sin publicidad y hecho para jugadores reales.</p>
-    <a href="https://app.ranketa.lat" class="btn-primary" style="font-size:17px; padding:16px 32px;">⚡ Abrir Ranketa gratis</a>
-    <div class="app-badges">
-      <span class="app-badge">📱 Funciona en iPhone y Android</span>
-      <span class="app-badge">💻 También en la web</span>
+    <div style="font-size:56px;margin-bottom:20px">🎾</div>
+    <h2 class="h2">¿Listo para jugar?</h2>
+    <p>Sumate a la comunidad de pádel de Santiago del Estero. Gratis, sin publicidad, hecha para jugadores reales.</p>
+    <a href="https://app.ranketa.lat" class="btn btn-green" style="font-size:17px;padding:16px 36px">⚡ Abrir Ranketa gratis</a>
+    <div class="cta-pills">
+      <span class="cta-pill">📱 iPhone y Android</span>
+      <span class="cta-pill">💻 También en la web</span>
+      <span class="cta-pill">🔔 Notificaciones push</span>
+      <span class="cta-pill">🚫 Sin publicidad</span>
     </div>
   </div>
 </div>
@@ -360,27 +788,45 @@
 <!-- FOOTER -->
 <footer>
   <div class="footer-logo">Rank<span>eta</span></div>
+  <p style="font-size:14px;color:var(--soft);max-width:400px;line-height:1.6;text-align:center">La app de pádel de Santiago del Estero. Hecha por jugadores, para jugadores.</p>
   <div class="footer-links">
     <a href="https://app.ranketa.lat">App</a>
     <a href="#features">Features</a>
-    <a href="#torneos">Torneos</a>
-    <a href="https://app.ranketa.lat" onclick="event.preventDefault(); window.open('https://app.ranketa.lat', '_blank')">Términos y Privacidad</a>
+    <a href="#canchas">Canchas</a>
+    <a href="#premium">Premium</a>
+    <a href="#faq">FAQ</a>
+    <a href="https://wa.me/543855007321">WhatsApp</a>
   </div>
   <div class="footer-copy">© 2026 Ranketa · Santiago del Estero, Argentina · Hecho con 🎾</div>
 </footer>
 
 <script>
-  // Scroll reveal
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  // Reveal on scroll
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    obs.observe(el);
+    // Stagger siblings
+    const parent = el.parentElement;
+    if (parent) {
+      const siblings = parent.querySelectorAll('.reveal');
+      siblings.forEach((s, j) => { s.style.transitionDelay = `${j * 0.07}s`; });
+    }
+  });
 
-  // Stagger children reveals
-  document.querySelectorAll('.features-grid, .testimonials, .steps').forEach(grid => {
-    grid.querySelectorAll('.reveal').forEach((el, i) => {
-      el.style.transitionDelay = `${i * 0.08}s`;
-    });
+  // FAQ toggle
+  function toggleFaq(el) {
+    const item = el.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  // Nav active link
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    nav.style.borderBottomColor = window.scrollY > 50 ? 'var(--border)' : 'transparent';
   });
 </script>
 </body>
